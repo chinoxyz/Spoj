@@ -18,6 +18,7 @@ using namespace std;
 
 int main()
 {
+    //printf("DD");
     //freopen("C:/Users/Deepak/Desktop/Deepak/Programs/Spoj/Text/MKEQUAL.txt","r",stdin);
     int cases,i,j;
 
@@ -48,5 +49,4 @@ int main()
     }
     return 0;
 }
-
 
