@@ -103,69 +103,77 @@ inline i64 readPosLLD()
 }
 
 #define MOD 1000000007
+#define ULL unsigned long long
+//#define INV 333333336
 
-map<i64,int> mp;
-map<i64,int> mp1;
-map<i64,int> mp2;
+i64 INV;
+
+ULL pow_mod(ULL n)
+{
+    ULL x=1,p=2;
+    while(n)
+    {
+        if(n&1)
+        {
+            x=(x*p)%MOD;
+        }
+
+        p=(p*p)%MOD;
+        n>>=1;
+    }
+
+    return x;
+}
+
+int fast_pow(i64 base,i64 n,i64 M)
+{
+    if(n==0)
+    {
+        return 1;
+    }
+
+    if(n==1)
+    {
+        return base;
+    }
+
+    i64 halfn=fast_pow(base,n/2,M);
+
+    if((n%2)==0)
+    {
+        return ( halfn * halfn ) % M;
+    }
+    else
+    {
+        return ( ( ( halfn * halfn ) % M ) * base ) % M;
+    }
+}
+
+int findMMI_fermat(int n,int M)
+{
+    return fast_pow(n,M-2,M);
+}
 
 int main()
 {
-
     freopen("Text/DIVISION.txt","r",stdin);
-    int j,ans;
-    i64 n,i,mx;
-    int a[3],b[3];
-    mp[0]=1;
-    mp1[0]=0;
-    mp2[0]=0;
-    mx=0;
+    ULL n, result;
 
-    while((n=readPosLLD())>0)
+    INV=findMMI_fermat(3,MOD);
+    //cout<<INV<<endl;
+
+    while(scanf("%llu",&n)!=EOF)
     {
-        a[0]=mp[n];
-
-        if(a[0]==0)
+        if(n&1)
         {
-            MSET(b,0);
-            a[0]=mp[mx];
-            a[1]=mp1[mx];
-            a[2]=mp2[mx];
-
-            b[0]=a[0];
-            b[1]=a[1];
-            b[2]=a[2];
-
-            for(i=mx;i<n;++i)
-            {
-                if(i&1)
-                {
-                    b[0]+=a[1];
-                    b[1]+=a[2];
-                    b[2]+=a[0];
-                }
-                else
-                {
-                    b[0]+=a[2];
-                    b[1]+=a[0];
-                    b[2]+=a[1];
-                }
-                b[0]%=MOD;
-                b[1]%=MOD;
-                b[2]%=MOD;
-
-                a[0]=b[0];
-                a[1]=b[1];
-                a[2]=b[2];
-
-                mp[i+1]=a[0];
-                mp1[i+1]=a[1];
-                mp2[i+1]=a[2];
-            }
-
-            mx=n;
-
+            result=((pow_mod(n)+1)*INV)%MOD;
         }
-        printf("%d\n",a[0]);
+        else
+        {
+            result=((pow_mod(n)+2)*INV)%MOD;
+        }
+
+        printf("%llu\n",result);
     }
 
 	return 0;
