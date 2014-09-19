@@ -43,6 +43,24 @@ using namespace std;
 #define MAXN 100001
 
 i64 data[MAXN];
+i64 dp[MAXN];
+
+i64 solve(int pos)
+{
+    if(pos>=n)
+    {
+        return 0;
+    }
+
+    if(dp[pos]!=-1)
+    {
+        return dp[pos];
+    }
+
+    int &ret=dp[pos];
+
+    if(n-pos<=3)
+}
 
 int main(){
 
@@ -55,24 +73,14 @@ int main(){
     while(cases--)
     {
         scanf("%d",&n);
+        MSET(dp,-1);
 
         for(int i=0;i<n;++i)
         {
-            scanf("%d %lld",&td,&tp);
-            arr[i].first=td;
-            arr[i].second=tp;
+            scanf("%lld",data+i);
         }
 
-        scanf("%d %lld",&st_d,&st_p);
-
-        for(int i=0;i<n;++i)
-        {
-            arr[i].first=st_d-arr[i].first;
-        }
-
-        sort(arr,arr+n);
-
-        printf("%d\n",solve());
+        printf("%lld\n",solve(0));
     }
 
 
