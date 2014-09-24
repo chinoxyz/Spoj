@@ -41,69 +41,92 @@ using namespace std;
 #define PIPIPII pair< int, PIPII >
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
 
-i64 solve(int pos)
-{
-    if(pos>=n)
+
+
+#define MOD 1000000007
+
+
+i64 orig[2][2]={    {1,1},
+                    {1,0}
+                };
+
+i64 res[2][2];
+
+i64 unit[2][2]={    {1,0},
+                    {0,1}
+                };
+
+
+
+void multt(i64 a[2][2], i64 b[2][2]) {
+	i64 temp[2][2] = {0};
+
+	int i, j, k;
+
+	for(i = 0; i < 2; i++)
     {
-        return 0;
-    }
-
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
+        for(j = 0; j < 2; j++)
         {
-            ret+=data[i];
+            for(k = 0; k < 2; k++)
+            {
+				temp[i][j] += a[i][k] * b[k][j];
+				temp[i][j] %= MOD;
+			}
         }
 
-        return ret;
     }
 
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
 
-    return ret;
+	memcpy(a, temp,sizeof(temp));
 }
 
-int main(){
 
-    freopen("Text/DCEPC501.txt","r",stdin);
+
+
+
+void calc(i64 n)
+{
+    if(n==0)
+    {
+        memcpy(res,unit,sizeof(unit));
+        return;
+    }
+
+    if(n&1)
+    {
+        calc(n-1);
+        multt(res,orig);
+        return;
+    }
+
+    calc(n>>1);
+    multt(res,res);
+}
+
+int main()
+{
+
+    freopen("Text/FLIB.txt","r",stdin);
 
     int cases;
+    i64 n,ret;
 
     scanf("%d",&cases);
 
     while(cases--)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
+        scanf("%lld",&n);
+        n<<=1;
 
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
+        calc(n);
+        //printf("%lld\n",n);
 
-        printf("%lld\n",solve(0));
+        ret=(res[0][0]*res[0][1])%MOD;
+
+        printf("%lld\n",ret);
     }
-
-
 
     return 0;
 }

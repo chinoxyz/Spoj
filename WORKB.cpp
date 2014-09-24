@@ -39,71 +39,42 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+#define MAXN 100000
 
-#define MAXN 100001
+i64 days[MAXN],num_days,flight_cost,salary;
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
-
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
+    freopen("Text/WORKB.txt","r",stdin);
 
     int cases;
 
     scanf("%d",&cases);
+    i64 ans=0;
 
-    while(cases--)
+    for(int t=1;t<=cases;++t)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
+        ans=0;
+        scanf("%lld %lld %lld",&num_days,&flight_cost,&salary);
 
-        for(int i=0;i<n;++i)
+        for(int i=0;i<num_days;++i)
         {
-            scanf("%lld",data+i);
+            scanf("%lld",days+i);
+        }
+        ans+=(num_days*salary);
+        ans+=(flight_cost<<1);
+
+        for(int i=1;i<num_days;++i)
+        {
+            i64 diff=days[i]-days[i-1]-1;
+
+        ans+=min(2*flight_cost,diff*salary);
         }
 
-        printf("%lld\n",solve(0));
+        printf("Case #%d: %lld\n",t,ans);
     }
-
-
 
     return 0;
 }

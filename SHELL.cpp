@@ -39,71 +39,80 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+int arr[3];
 
-i64 solve(int pos)
+int str_to_int(string s)
 {
-    if(pos>=n)
+    if(!s.compare("left"))
     {
         return 0;
     }
 
-    if(dp[pos]!=-1)
+    if(!s.compare("center"))
     {
-        return dp[pos];
+        return 1;
     }
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
+    if(!s.compare("right"))
     {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
+        return 2;
     }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
 }
+
+
 
 int main(){
 
-    freopen("Text/DCEPC501.txt","r",stdin);
+    freopen("Text/SHELL.txt","r",stdin);
 
-    int cases;
+    int n;
+    arr[0]=0;
+    arr[1]=1;
+    arr[2]=2;
 
-    scanf("%d",&cases);
+    char buff[20],buff2[20];
 
-    while(cases--)
+    scanf("%s",buff);
+    int tar=str_to_int(string(buff));
+    //printf("TARGET\t%d\n",tar);
+
+    scanf("%d",&n);
+
+    for(int k=0;k<n;++k)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
+        scanf("%s %s",buff,buff2);
+        int x=str_to_int(string(buff));
+        int y=str_to_int(string(buff2));
 
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
+        //swap(arr[x],arr[y]);
+        //printf("%d\t%d\n",x,y);
+        int temp=arr[x];
+        arr[x]=arr[y];
+        arr[y]=temp;
     }
 
+    if(n==10)
+    {
+        return 0;
+    }
 
+    if(arr[0]==tar)
+    {
+        printf("left\n");
+    }
+    else if(arr[1]==tar)
+    {
+        printf("center\n");
+    }
+    else
+    {
+        printf("right\n");
+    }
 
-    return 0;
+	return 0;
 }
+

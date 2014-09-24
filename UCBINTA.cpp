@@ -39,69 +39,51 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+#define MAXN 1001
 
-#define MAXN 100001
-
-i64 data[MAXN];
-i64 dp[MAXN];
+int arr[MAXN][MAXN];
 int n;
+int ret[MAXN];
 
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
+    freopen("Text/UCBINTA.txt","r",stdin);
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    scanf("%d",&n);
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
+    for(int i=0;i<n;++i)
     {
-        for(int i=pos;i<n;++i)
+        for(int j=0;j<n;++j)
         {
-            ret+=data[i];
+            scanf("%d",&arr[i][j]);
         }
-
-        return ret;
     }
 
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
+    if(n==2)
     {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
+        ret[0]=1;
+        ret[1]=arr[0][1]-1;
     }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
+    else
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
+        int diff=arr[0][1]-arr[1][2];
+        ret[0]=(diff+arr[0][2])/2;
 
-        for(int i=0;i<n;++i)
+        for(int i=1;i<n;++i)
         {
-            scanf("%lld",data+i);
+            ret[i]=arr[0][i]-ret[0];
         }
-
-        printf("%lld\n",solve(0));
     }
+
+    for(int i=0;i<n-1;++i)
+    {
+        printf("%d ",ret[i]);
+    }
+
+    printf("%d\n",ret[n-1]);
+
 
 
 

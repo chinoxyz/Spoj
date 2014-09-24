@@ -39,71 +39,59 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+#define MAXX 1001
 
-#define MAXN 100001
+int dp[MAXX][MAXX];
+int arr[MAXX];
+int n,k;
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
+int solve(int st,int mx)
 {
-    if(pos>=n)
+    if(st>=n || mx<=0)
     {
         return 0;
     }
 
-    if(dp[pos]!=-1)
+    if(dp[st][mx]!=-1)
     {
-        return dp[pos];
+        return dp[st][mx];
     }
 
-    i64 &ret=dp[pos];
+    int &ret=dp[st][mx];
     ret=0;
 
-    if(n-pos<=3)
+    if(arr[st]<=mx)
     {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
+        ret=max(ret,arr[st]+solve(st+2,mx-arr[st]));
     }
 
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
+    ret=max(ret,solve(st+1,mx));
 
     return ret;
 }
 
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
+int main()
+{
+    freopen("Text/RPLB.txt","r",stdin);
 
     int cases;
 
     scanf("%d",&cases);
 
-    while(cases--)
+    for(int t=1;t<=cases;++t)
     {
-        scanf("%d",&n);
         MSET(dp,-1);
+        scanf("%d %d",&n,&k);
 
         for(int i=0;i<n;++i)
         {
-            scanf("%lld",data+i);
+            scanf("%d",arr+i);
         }
 
-        printf("%lld\n",solve(0));
+        printf("Scenario #%d: %d\n",t,solve(0,k));
     }
-
-
 
     return 0;
 }

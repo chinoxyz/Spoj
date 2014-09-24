@@ -41,68 +41,52 @@ using namespace std;
 #define PIPIPII pair< int, PIPII >
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
+#define MAXN 10002
+
+i64 x[MAXN],y[MAXN];
 int n;
 
-i64 solve(int pos)
+i64 dp[MAXN/2][MAXN/2];
+
+
+int main()
 {
-    if(pos>=n)
+
+    freopen("Text/MPILOT.txt","r",stdin);
+
+    scanf("%d",&n);
+
+    for(int i=0;i<n;++i)
     {
-        return 0;
+        scanf("%lld %lld",x+i,y+i);
     }
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
+    for(int i=1;i<=n/2;++i)
     {
-        for(int i=pos;i<n;++i)
+        for(int j=0;j<=i;++j)
         {
-            ret+=data[i];
+            if(i==j)
+            {
+                dp[i][j]=dp[i][j-1]+x[i+j-1];
+            }
+            else
+            {
+                if(j>0)
+                {
+                    dp[i][j]=min(dp[i][j-1]+x[i+j-1],dp[i-1][j]+y[i+j-1]);
+                }
+                else
+                {
+                    dp[i][j]=dp[i-1][j]+y[i+j-1];
+                }
+
+            }
         }
-
-        return ret;
     }
 
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
-    }
-
+    printf("%lld\n",dp[n/2][n/2]);
 
 
     return 0;

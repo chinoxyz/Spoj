@@ -39,71 +39,23 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+int main() {
+    int num_cases;
+    u64 mod_by = (24LL)*1000000007LL;
+    cin >> num_cases;
 
-#define MAXN 100001
-
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
-{
-    if(pos>=n)
-    {
-        return 0;
+    u64 n;
+    u64 answer;
+    for(int i = 0; i < num_cases; i++) {
+        cin >> n;
+        u64 x = (n*(n-1)) % (mod_by);
+        u64 y = (x*(n-2)) % (mod_by);
+        u64 z = (y*(n-3)) % (mod_by);
+        answer = z / 24LL;
+        cout << answer << endl;
     }
-
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
-    }
-
-
 
     return 0;
 }

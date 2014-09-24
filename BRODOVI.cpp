@@ -39,71 +39,50 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+#define MAXN 1000000001
 
-#define MAXN 100001
+bitset<5000> vis;
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+int arr[5000];
 
-i64 solve(int pos)
-{
-    if(pos>=n)
-    {
-        return 0;
-    }
-
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
 
 int main(){
 
-    freopen("Text/DCEPC501.txt","r",stdin);
+    freopen("Text/BRODOVI.txt","r",stdin);
 
-    int cases;
+    int n,ct=0,ti,st;
+    scanf("%d",&n);
 
-    scanf("%d",&cases);
-
-    while(cases--)
+    for(int i=0;i<n;++i)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
+        scanf("%d",arr+i);
     }
 
+    for(int i=1;i<n;++i)
+    {
+        if(!vis.test(i))
+        {
+            vis.set(i);
+            ++ct;
+            int lt=arr[i];
 
+            int diff=arr[i]-arr[0];
 
-    return 0;
+            for(int j=i+1;j<n;++j)
+            {
+                if(lt+diff==arr[j])
+                {
+                    vis.set(j);
+                    lt=arr[j];
+                }
+            }
+        }
+    }
+
+    printf("%d\n",ct);
+
+	return 0;
 }
+

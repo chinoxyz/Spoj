@@ -39,71 +39,44 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
 
-i64 solve(int pos)
+
+
+
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
+    freopen("Text/MINMOVE.txt","r",stdin);
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    char str[100001];
+    scanf("%s",str);
 
-    i64 &ret=dp[pos];
-    ret=0;
+    int len=strlen(str);
+    int best_start=0,candidate_start=1,matching_len=0;
 
-    if(n-pos<=3)
+    while(candidate_start<len && best_start+matching_len+1<len)
     {
-        for(int i=pos;i<n;++i)
+        if(str[best_start+matching_len]==str[(candidate_start+matching_len)%len])
         {
-            ret+=data[i];
+            ++matching_len;
         }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
+        else if(str[best_start+matching_len]<str[(candidate_start+matching_len)%len])
         {
-            scanf("%lld",data+i);
+            candidate_start=candidate_start+matching_len+1;
+            matching_len=0;
         }
-
-        printf("%lld\n",solve(0));
+        else
+        {
+            best_start=max(best_start+matching_len+1,candidate_start);
+            candidate_start=best_start+1;
+            matching_len=0;
+        }
     }
 
-
+    printf("%d\n",best_start);
 
     return 0;
 }

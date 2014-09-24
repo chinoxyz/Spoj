@@ -39,71 +39,66 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+#define MAXN 1005
+bool poss;
 
-i64 solve(int pos)
+int arr[MAXN];
+
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    freopen("Text/KURUK14.txt","r",stdin);
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
+    int cases,ti,n;
 
     scanf("%d",&cases);
 
     while(cases--)
     {
+        poss=true;
+        MSET(arr,0);
+
         scanf("%d",&n);
-        MSET(dp,-1);
+
 
         for(int i=0;i<n;++i)
         {
-            scanf("%lld",data+i);
+            scanf("%d",&ti);
+            ++arr[ti];
         }
 
-        printf("%lld\n",solve(0));
+
+        for(int i=0;i<n/2;++i)
+        {
+            ti=arr[i]+arr[n-1-i];
+            if(ti!=2)
+            {
+                poss=false;
+                break;
+            }
+        }
+
+        if(n&1)
+        {
+            if(arr[n/2]!=1)
+            {
+                poss=false;
+            }
+        }
+
+        if(poss)
+        {
+            printf("YES\n");
+        }
+        else
+        {
+            printf("NO\n");
+        }
     }
-
-
 
     return 0;
 }

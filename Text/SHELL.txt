@@ -1,0 +1,48 @@
+left
+10
+left right
+left right
+left right
+left right
+left right
+left right
+left right
+left right
+left right
+left right
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center
+left
+2
+left right
+right center

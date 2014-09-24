@@ -39,70 +39,33 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
-
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
+    freopen("Text/NY10B.txt","r",stdin);
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
-        }
-
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
+    int cases,num1,num2,summ,j,sn,base;
     scanf("%d",&cases);
 
     while(cases--)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
+        scanf("%d %d %d %d",&sn,&base,&num1,&num2);
+        j=1;
+        summ=0;
 
-        for(int i=0;i<n;++i)
+        while(num1!=0 || num2!=0)
         {
-            scanf("%lld",data+i);
+            summ+=((((num1%base)+(num2%base))%base)*j);
+
+            num1/=base;
+            num2/=base;
+            j*=base;
         }
 
-        printf("%lld\n",solve(0));
+        printf("%d %d\n",sn,summ);
     }
-
 
 
     return 0;

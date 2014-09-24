@@ -39,71 +39,57 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+#define MAXN 50002
 
-i64 solve(int pos)
+int num_cows,num_highways,speed_reduction,min_speed;
+int ct=0;
+
+VI arr;
+
+
+int main()
 {
-    if(pos>=n)
+    freopen("Text/COWCAR.txt","r",stdin);
+
+    scanf("%d %d %d %d",&num_cows,&num_highways,&speed_reduction,&min_speed);
+    int itr=0,ti,ms;
+    VI::iterator it;
+
+    for(int i=0;i<num_cows;++i)
     {
-        return 0;
+        scanf("%d",&ti);
+        arr.PB(ti);
     }
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    sort(arr.begin(),arr.end());
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
+    int st=0,en;
+    while(true)
     {
-        for(int i=pos;i<n;++i)
+        ms=min_speed+itr*speed_reduction;
+        it=lower_bound(arr.begin()+st,arr.end(),ms);
+
+        if(it==arr.end())
         {
-            ret+=data[i];
+            break;
         }
 
-        return ret;
-    }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
+        st=it-arr.begin();
+        ++itr;
+        en=min(st+num_highways-1,num_cows-1);
+        ct+=en-st+1;
+        st=en+1;
+        if(st>=num_cows)
         {
-            scanf("%lld",data+i);
+            break;
         }
-
-        printf("%lld\n",solve(0));
     }
 
-
+    printf("%d\n",ct);
 
     return 0;
 }

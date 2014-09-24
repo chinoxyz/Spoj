@@ -39,71 +39,45 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
+    freopen("Text/TAP2013G.txt","r",stdin);
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    int n;
+    int j=0,c=0,i;
+	scanf("%d",&n);
+	int a[100005],b[100005];
 
-    i64 &ret=dp[pos];
-    ret=0;
+	for(i=0;i<n;++i)
+	{
+        scanf("%d",&a[i]);
+	}
 
-    if(n-pos<=3)
+	 for(i=0;i<n;++i)
+	 {
+        scanf("%d",&b[i]);
+	 }
+
+	sort(a,a+n);
+	sort(b,b+n);
+
+    i=0,j=0;
+	while(i<n&&j<n)
     {
-        for(int i=pos;i<n;++i)
-        {
-            ret+=data[i];
+		if(a[i]<b[j])
+		{
+			 c++;
+			 i++;
+			 j++;
         }
-
-        return ret;
+		else
+		{
+            j++;
+		}
     }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
-    }
-
-
-
-    return 0;
+   printf("%d",c);
 }

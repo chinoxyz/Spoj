@@ -39,71 +39,80 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
 
-#define MAXN 100001
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+#define MAXN 62
 
-i64 solve(int pos)
+
+u64 n;
+
+u64 ncr[MAXN][MAXN];
+
+
+void pre_calc()
 {
-    if(pos>=n)
+    for(int i=1;i<MAXN;++i)
     {
-        return 0;
+        ncr[i][0]=1;
+        ncr[i][i]=1;
     }
 
-    if(dp[pos]!=-1)
+    for(int i=1;i<MAXN;++i)
     {
-        return dp[pos];
-    }
-
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
-    {
-        for(int i=pos;i<n;++i)
+        for(int j=1;j<i;++j)
         {
-            ret+=data[i];
+            ncr[i][j]=ncr[i-1][j-1]+ncr[i-1][j];
+            //printf("%llu\n",ncr[i][j]);
         }
-
-        return ret;
     }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
 }
 
-int main(){
+u64 ans[MAXN];
 
-    freopen("Text/DCEPC501.txt","r",stdin);
+
+int main()
+{
+    pre_calc();
+
+    freopen("Text/NOVICE63.txt","r",stdin);
 
     int cases;
 
     scanf("%d",&cases);
 
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
+    ans[0]=0;
+    ans[1]=1;
 
-        for(int i=0;i<n;++i)
+    for(int i=2;i<MAXN;++i)
+    {
+        ans[i]+=ans[i-1];
+
+        if(i&1)
         {
-            scanf("%lld",data+i);
+            ans[i]+=ncr[i][i/2];
         }
 
-        printf("%lld\n",solve(0));
     }
 
 
+
+    while(cases--)
+    {
+        scanf("%llu",&n);
+
+        int x=(int)log2(n);
+
+        u64 ret=ans[x-1];
+
+        if(x==1)
+        {
+            ret=1;
+        }
+
+        printf("%llu\n",ret);
+    }
 
     return 0;
 }

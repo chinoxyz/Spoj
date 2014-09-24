@@ -40,67 +40,46 @@ using namespace std;
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
 
+#define MAXX 1000001
 
-#define MAXN 100001
+int arr[MAXX];
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
-
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
-    {
-        return 0;
-    }
 
-    if(dp[pos]!=-1)
-    {
-        return dp[pos];
-    }
+    freopen("Text/FACVSPOW.txt","r",stdin);
 
-    i64 &ret=dp[pos];
-    ret=0;
 
-    if(n-pos<=3)
+    int cases,num;
+    double rightt,leftt,td;
+
+    arr[1]=2;
+    rightt=log(2.0);
+
+
+    for(int i=2,j=2;i<MAXX;++i)
     {
-        for(int i=pos;i<n;++i)
+        td=log((double)i);
+
+        for(++j;;++j)
         {
-            ret+=data[i];
+            leftt=j*td;
+            rightt+=log((double)j);
+
+            if(leftt<rightt)
+            {
+                arr[i]=j;
+                break;
+            }
         }
-
-        return ret;
     }
-
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
 
     scanf("%d",&cases);
 
     while(cases--)
     {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
+        scanf("%d",&num);
+        printf("%d\n",arr[num]);
     }
 
 

@@ -39,71 +39,72 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
 
+#define MAXX 30001
 
-#define MAXN 100001
+//const i64 C=1000000007LL;
+const i64 C = (i64)1e9 + 7;
 
-i64 data[MAXN];
-i64 dp[MAXN];
-int n;
+i64 hash_left[MAXX],hash_right[MAXX],poww[MAXX];
 
-i64 solve(int pos)
+int main()
 {
-    if(pos>=n)
+
+    int k,ret=0,ti;
+    string str;
+    int len;
+
+    freopen("Text/PLD.txt","r",stdin);
+
+    poww[0]=1;
+
+    for(int i=1;i<MAXX;++i)
     {
-        return 0;
+        poww[i]=poww[i-1]*C;
     }
 
-    if(dp[pos]!=-1)
+    //scanf("%d",&k);
+    cin>>k;
+    cin>>str;
+    len=str.size();
+
+    //printf("%d%s%d\n",k,str.c_str(),len);
+
+    for(int i=0;i<k;++i)
     {
-        return dp[pos];
+        hash_left[0]+=poww[k-i-1]*str[i];
     }
 
-    i64 &ret=dp[pos];
-    ret=0;
-
-    if(n-pos<=3)
+    for(int i=1;(i+k-1)<len;++i)
     {
-        for(int i=pos;i<n;++i)
+        hash_left[i]=(hash_left[i-1]-poww[k-1]*str[i-1])*C+str[i+k-1];
+    }
+
+
+    reverse(str.begin(),str.end());
+
+    for(int i=0;i<k;++i)
+    {
+        hash_right[0]+=poww[k-i-1]*str[i];
+    }
+
+    for(int i=1;(i+k-1)<len;++i)
+    {
+        hash_right[i]=(hash_right[i-1]-poww[k-1]*str[i-1])*C + str[i+k-1];
+    }
+
+    for(int i=0;(i+k-1)<len;++i)
+    {
+        ti=i+k-1;
+
+        if(hash_left[i]==hash_right[len-1-ti])
         {
-            ret+=data[i];
+            ++ret;
         }
-
-        return ret;
     }
 
-    i64 accs=0;
-    for(int i=1;i<=3;++i)
-    {
-        accs+=data[pos+i-1];
-        ret=max(ret,accs+solve(pos+i*2));
-    }
-
-    return ret;
-}
-
-int main(){
-
-    freopen("Text/DCEPC501.txt","r",stdin);
-
-    int cases;
-
-    scanf("%d",&cases);
-
-    while(cases--)
-    {
-        scanf("%d",&n);
-        MSET(dp,-1);
-
-        for(int i=0;i<n;++i)
-        {
-            scanf("%lld",data+i);
-        }
-
-        printf("%lld\n",solve(0));
-    }
-
-
+    printf("%d\n",ret);
 
     return 0;
 }
