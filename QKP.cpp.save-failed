@@ -1,0 +1,114 @@
+#include <cstdio>
+#include <algorithm>
+#include<iostream>
+#include<vector>
+#include<climits>
+#include <complex>
+#include <iostream>
+#include <valarray>
+#include<cstring>
+#include<queue>
+#include<bitset>
+#include<map>
+#include<set>
+#include<sstream>
+#include<ctime>
+#include <stack>
+#include <iomanip>
+
+
+using namespace std;
+
+#define PB push_back
+#define i64 long long
+#define FOR(i,a,b) for(i=(a);i<(b);++i)
+#define FORE(i,a,b) for(i=(a);i<=(b);++i)
+#define REP(i,n) FOR(i,0,n)
+#define REPE(i,n) FORE(i,0,n)
+#define SZ(v) ((v).size())
+#define LD long double
+#define VI vector<int>
+#define VS vector<string>
+#define VD vector<double>
+#define VLD vector<LD>
+#define MSET(x,y) memset((x),(y),sizeof(x))
+#define SZOF(x) sizeof((x))
+#define VVI vector< VI >
+#define PII pair< int,int >
+#define VPII vector< PII >
+#define MP make_pair
+#define PIPII pair<int, PII >
+#define PIPIPII pair< int, PIPII >
+#define u64 unsigned i64
+
+
+#define MAXN 1001
+#define MAXP 101
+
+int board[MAXN][MAXN];
+int queens[MAXP][2],knights[MAXP][2],pawns[MAXP][2];
+int n,m,q,k,p,ct=0;
+
+
+int main()
+{
+    freopen("Text/QKP.txt","r",stdin);
+
+    int cases,x,y;
+
+    scanf("%d",&cases);
+
+    for(int t=1;t<=cases;++t)
+    {
+        scanf("%d %d",&n,&m);
+
+        if(n==0  && m==0)
+        {
+            break;
+        }
+
+        MSET(board,0);
+
+        scanf("%d",&q);
+
+        for(int i=0;i<q;++i)
+        {
+            scanf("%d %d",&x,&y);
+            --x;
+            --y;
+            board[x][y]=-1;
+            queens[i][0]=x;
+            queens[i][1]=y;
+        }
+
+
+        scanf("%d",&k);
+
+        for(int i=0;i<k;++i)
+        {
+            scanf("%d %d",&x,&y);
+            --x;
+            --y;
+            board[x][y]=-1;
+            knights[i][0]=x;
+            knights[i][1]=y;
+        }
+
+
+        scanf("%d",&p);
+
+        for(int i=0;i<p;++i)
+        {
+            scanf("%d %d",&x,&y);
+            --x;
+            --y;
+            board[x][y]=-1;
+            pawns[i][0]=x;
+            pawns[i][1]=y;
+        }
+    }
+
+
+
+    return 0;
+}
