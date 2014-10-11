@@ -1,0 +1,60 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.*;
+
+
+class KPEQU {
+	int MAXN=10001;
+	int arr[]=new int[MAXN];
+	ArrayList<Integer> primes=new ArrayList<Integer>();
+	
+	void sieve()
+	{
+		int sq=(int)Math.sqrt(MAXN);
+		
+		for(int i=3;i<=sq;i+=2)
+		{
+			if(arr[i]==0)
+			{
+				for(int j=i*i;j<MAXN;j+=i)
+				{
+					arr[j]=1;
+				}
+			}
+		}
+		
+		primes.add(2);
+		
+		for(int i=3;i<MAXN;i+=2)
+		{
+			if(arr[i]==0)
+			{
+				primes.add(i);
+			}
+		}
+		
+		
+	}
+	
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\KPEQU.txt"));
+			
+			while(true)
+			{
+				int n=Integer.parseInt(br.readLine());
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}
+
+	}
+
+}

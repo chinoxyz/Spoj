@@ -1,0 +1,33 @@
+import java.util.Scanner;
+import java.io.*;
+import java.math.*;
+import java.math.BigInteger;
+
+
+class PAYING {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\PAYING.txt"));
+			
+			int cases;
+			BigInteger n,temp;
+			cases=Integer.parseInt(br.readLine());
+			
+			while(cases>0)
+			{
+				--cases;
+				n=BigInteger(br.readLine());
+			}
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+
+}

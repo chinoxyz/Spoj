@@ -1,0 +1,16 @@
+import java.util.Scanner;
+import java.io.*;
+import java.math.*;
+import java.math.BigInteger;
+
+
+class PAYING {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+
+
+	}
+
+}
