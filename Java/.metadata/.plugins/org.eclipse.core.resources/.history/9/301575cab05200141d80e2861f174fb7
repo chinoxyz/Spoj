@@ -1,0 +1,21 @@
+import java.io.*;
+import java.util.*;
+import java.math.*;
+
+class DIVSUM2 {
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\DIVSUM2.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+
+}
