@@ -43,231 +43,198 @@ using namespace std;
 #define u64 unsigned i64
 
 
-#define MAXN 9
-
-
-
-set<PII >::iterator it,it2;
-
-struct data
-{
-    set<PII > arr;
-    data(int *a)
-    {
-        for(int i=0;i<4;++i)
-        {
-            arr.insert(MP(a[2*i],a[2*i+1]));
-        }
-    }
-
-    data(set<PII > barr)
-    {
-        set<PII >::iterator it;
-        it=barr.begin();
-
-        for(int i=0;i<4;++i)
-        {
-            arr.insert(*it);
-            ++it;
-        }
-    }
-
-};
-
-data *st,*en;
-int a[MAXN];
-
-bool vis[MAXN][MAXN][MAXN][MAXN][MAXN][MAXN][MAXN][MAXN];
+#define MAXN 8
 
 int dx[]={-1,0,1,0,-2,0,2,0};
 int dy[]={0,1,0,-1,0,2,0,-2};
 bool poss;
 
+bool st[MAXN][MAXN],en[MAXN][MAXN],curr[MAXN][MAXN];
 
-inline bool is_vis(data *x)
+bool is_valid(int x,int y)
 {
-    int arr[8];
-
-    it=x->arr.begin();
-    for(int i=0;i<4;++i)
-    {
-        arr[2*i]=it->first;
-        arr[2*i+1]=it->second;
-        ++it;
-    }
-    return vis[arr[0]][arr[1]][arr[2]][arr[3]][arr[4]][arr[5]][arr[6]][arr[7]];
-}
-
-inline void set_vis(data *x)
-{
-    int arr[8];
-
-    it=x->arr.begin();
-    for(int i=0;i<4;++i)
-    {
-        arr[2*i]=it->first;
-        arr[2*i+1]=it->second;
-        ++it;
-    }
-
-    vis[arr[0]][arr[1]][arr[2]][arr[3]][arr[4]][arr[5]][arr[6]][arr[7]]=1;
-}
-
-inline bool is_en(data *x)
-{
-    bool ret=true;
-    it=x->arr.begin();
-    it2=en->arr.begin();
-
-    for(int i=0;i<4;++i)
-    {
-        if(it->first!=it2->first || it->second!=it2->second)
-        {
-            ret=false;
-            break;
-        }
-        ++it;
-        ++it2;
-    }
-
-    return ret;
-}
-
-inline bool is_valid(int x,int y,data *a)
-{
-    if(x<=1 || y<=1 || x>8 || y>8)
+    if(x<0 || y<0 || x>=MAXN || y>=MAXN)
     {
         return false;
-    }
-
-    it=a->arr.begin();
-
-    for(int i=0;i<4;++i)
-    {
-        if(it->first==x && it->second==y)
-        {
-            return false;
-        }
-        ++it;
     }
 
     return true;
 }
 
-
-
-inline void solve()
+u64 encode(bool arr[MAXN][MAXN])
 {
-    poss=false;
-    MSET(vis,0);
+    u64 ret=0ULL;
 
-    queue<pair<int, data * > > q;
-    q.push(MP(0,st));
-    data *td,*ti;
+    for(int i=0;i<MAXN;++i)
+    {
+        for(int j=0;j<MAXN;++j)
+        {
+            if(arr[i][j])
+            {
+                ret|=(1ULL<<(i*MAXN+j));
+            }
+        }
+    }
 
-    int nx,ny,distt;
-    int i,j;
-    set<PII >::iterator it,it2;
+    return ret;
+}
+
+
+void decode(u64 conn,bool ret[MAXN][MAXN])
+{
+    for(int i=0;i<MAXN;++i)
+    {
+        for(int j=0;j<MAXN;++j)
+        {
+            ret[i][j]=0;
+            if( conn & (1ULL << (i*8+j)))
+            {
+                ret[i][j]=1;
+            }
+        }
+    }
+}
+
+void meet_in_middle(u64 conn,set<u64> &vis)
+{
+    queue<u64> q;
+    queue<int> distt;
+
+    q.push(conn);
+    distt.push(0);
+    int d;
 
     while(!q.empty())
     {
-        distt=q.front().first;
-        td=q.front().second;
+        conn=q.front();
+        d=distt.front();
+
         q.pop();
+        distt.pop();
 
-        if(is_en(td))
-        {
-            poss=true;
-            break;
-        }
-
-        if(distt>=8)
+        if(d==4)
         {
             continue;
         }
 
-        if(is_vis(td))
+        decode(conn,curr);
+
+        for(int i=0;i<MAXN;++i)
         {
-            continue;
-        }
-
-
-
-        set_vis(td);
-
-
-        it=td->arr.begin();
-
-        for(i=0;i<4;++i)
-        {
-            for(j=0;j<4;++j)
+            for(int j=0;j<MAXN;++j)
             {
-                nx=it->first+dx[j];
-                ny=it->second+dy[j];
-
-                if(is_valid(nx,ny,td))
+                if(!curr[i][j])
                 {
-                    ti=new data(td->arr);
-                    it2=ti->arr.find(MP(it->first,it->second));
-                    ti->arr.erase(it2);
-                    ti->arr.insert(MP(nx,ny));
-                    q.push(MP(distt+1,ti));
+                    continue;
                 }
-                else
-                {
-                    nx=it->first+dx[j+4];
-                    ny=it->second+dy[j+4];
 
-                    if(is_valid(nx,ny,td))
+                for(int k=0;k<4;++k)
+                {
+                    int nx=i+dx[k];
+                    int ny=j+dy[k];
+
+                    if(!is_valid(nx,ny))
                     {
-                        ti=new data(td->arr);
-                        it2=ti->arr.find(MP(it->first,it->second));
-                        ti->arr.erase(it2);
-                        ti->arr.insert(MP(nx,ny));
-                        q.push(MP(distt+1,ti));
+                        continue;
                     }
+
+                    if(curr[nx][ny])
+                    {
+                        nx=i+dx[k+4];
+                        ny=j+dy[k+4];
+
+                        if(!is_valid(nx,ny) || curr[nx][ny])
+                        {
+                            continue;
+                        }
+                    }
+
+                    curr[nx][ny]=1;
+                    curr[i][j]=0;
+
+                    u64 maskk=encode(curr);
+
+                    if(vis.count(maskk)==0)
+                    {
+                        vis.insert(maskk);
+                        q.push(maskk);
+                        distt.push(d+1);
+                    }
+
+                    curr[nx][ny]=0;
+                    curr[i][j]=1;
                 }
             }
-            ++it;
         }
     }
-
-    if(poss)
-    {
-        printf("YES\n");
-    }
-    else
-    {
-        printf("NO\n");
-    }
 }
+
+
 
 
 int main()
 {
     freopen("Text/SOLIT.txt","r",stdin);
     int cases;
-
+    int x,y;
     scanf("%d",&cases);
+    set<u64>::iterator it;
 
     while(cases--)
     {
-        for(int i=0;i<8;++i)
+        MSET(st,0);
+        MSET(en,0);
+
+        for(int i=0;i<4;++i)
         {
-            scanf("%d",a+i);
+            scanf("%d %d",&x,&y);
+            --x;
+            --y;
+            st[x][y]=1;
         }
 
-        st=new data(a);
-
-        for(int i=0;i<8;++i)
+        for(int i=0;i<4;++i)
         {
-            scanf("%d",a+i);
+            scanf("%d %d",&x,&y);
+            --x;
+            --y;
+            en[x][y]=1;
         }
 
-        en=new data(a);
-        //print_node(en);
+        set<u64> forr;
+        set<u64> backk;
 
-        solve();
+        u64 conn1=encode(st);
+        u64 conn2=encode(en);
+
+        forr.insert(conn1);
+        backk.insert(conn2);
+
+        meet_in_middle(conn1,forr);
+        meet_in_middle(conn2,backk);
+
+        poss=false;
+
+        it=forr.begin();
+
+        while(it!=forr.end())
+        {
+            if(backk.count(*it))
+            {
+                poss=true;
+                break;
+            }
+            ++it;
+        }
+
+        if(poss)
+        {
+            printf("YES\n");
+        }
+        else
+        {
+            printf("NO\n");
+        }
     }
     return 0;
 }

@@ -15,7 +15,6 @@
 #include<ctime>
 #include <stack>
 #include <iomanip>
-#include <cassert>
 
 
 using namespace std;
@@ -40,21 +39,15 @@ using namespace std;
 #define MP make_pair
 #define PIPII pair<int, PII >
 #define PIPIPII pair< int, PIPII >
+#define PIPIPIPII pair< int, PIPIPII >
 #define u64 unsigned i64
-#define Vi64 vector<i64>
-#define Vu64 vector<u64>
 
-#define MAXN 320000
-#define MAXM 1200000
+#define MAXN 305
+#define MAXM 90610
+#define INF 999999999
 
-int to[MAXM],nxt[MAXM],first_edge[MAXN];
-int cap[MAXM];
-int num_edges;
-int n,m;
-int st,en;
-int distt[MAXN],q[MAXN];
+int n,m,first_edge[MAXN],num_edges,nxt[MAXM],to[MAXM],cap[MAXM],st,en,distt[MAXN],q[MAXN];
 int headd,taill;
-
 
 void add_edge(int u,int v,int uv,int vu)
 {
@@ -69,28 +62,25 @@ void add_edge(int u,int v,int uv,int vu)
     first_edge[v]=num_edges++;
 }
 
-
-bool bfs()
+int bfs()
 {
+    int u;
+    headd=taill=0;
+
     MSET(distt,-1);
 
-    headd=taill=0;
-    q[taill++]=st;
     distt[st]=0;
-
-    int u;
+    q[taill++]=st;
 
     while(headd<taill)
     {
-        //printf("DD\n");
         u=q[headd++];
-
-        for(int i=first_edge[u];i>=0;i=nxt[i])
+        for(int i=first_edge[u];i>-1;i=nxt[i])
         {
-            if(cap[i]>0 && distt[to[i]]==-1)
+            if(cap[i] && distt[to[i]]==-1)
             {
-                q[taill++]=to[i];
                 distt[to[i]]=distt[u]+1;
+                q[taill++]=to[i];
             }
         }
     }
@@ -99,23 +89,21 @@ bool bfs()
 }
 
 
-
-
-int dfs(int u,int floww)
+int dfs(int u,int fl)
 {
     if(u==en)
     {
-        return floww;
+        return fl;
     }
 
+    int ret=0;
 
-    for(int i=first_edge[u];i>=0;i=nxt[i])
+    for(int i=first_edge[u];i>-1;i=nxt[i])
     {
-        if(cap[i]>0 && distt[to[i]]==distt[u]+1)
+        if(cap[i] && distt[to[i]]==distt[u]+1)
         {
-            int ret=dfs(to[i],min(floww,cap[i]));
-
-            if(ret>0)
+            ret=dfs(to[i],min(fl,cap[i]));
+            if(ret)
             {
                 cap[i]-=ret;
                 cap[i^1]+=ret;
@@ -124,30 +112,23 @@ int dfs(int u,int floww)
         }
     }
 
-
     return 0;
 }
 
-
-
-
-int max_flow()
+int dinic()
 {
-    int ret=0;
-
-    int x;
+    int ret=0,ti;
 
     while(bfs())
     {
         while(true)
         {
-            x=dfs(st,INT_MAX);
-            if(x==0)
+            ti=dfs(st,INF);
+            if(!ti)
             {
                 break;
             }
-
-            ret+=x;
+            ret+=ti;
         }
     }
 
@@ -157,50 +138,42 @@ int max_flow()
 
 int main()
 {
-    freopen("Text/IM.txt","r",stdin);
-    int cases,x,y;
+    freopen("Text/COCONUTS.txt","r",stdin);
+    int u,v;
 
-    scanf("%d",&cases);
-
-    while(cases--)
+    while(true)
     {
-        MSET(first_edge,-1);
-        num_edges=0;
-
         scanf("%d %d",&n,&m);
+        if(!n)
+        {
+            break;
+        }
+
+        st=0;
+        en=n+1;
+        num_edges=0;
+        MSET(first_edge,-1);
 
         for(int i=1;i<=n;++i)
         {
-            add_edge(2*i-1,2*i,1,0);
+            scanf("%d",&v);
+            if(v)
+            {
+                add_edge(st,i,1,0);
+            }
+            else
+            {
+                add_edge(i,en,1,0);
+            }
         }
 
         for(int i=0;i<m;++i)
         {
-            scanf("%d %d",&x,&y);
-            if(x > n || y > n) continue;
-            add_edge(2*x,2*y-1,n+1,0);
-            add_edge(2*x-1,2*y,0,n+1);
+            scanf("%d %d",&u,&v);
+            add_edge(u,v,1,1);
         }
 
-        add_edge(2*1,2*n+1,1,0);
-        add_edge(2*3,2*n+1,1,0);
-
-        st=2*2;
-        en=2*n+1;
-
-        int ret=max_flow();
-
-        //printf("%d\n",ret);
-
-
-        if(ret==2)
-        {
-            printf("YES\n");
-        }
-        else
-        {
-            printf("NO\n");
-        }
+        printf("%d\n",dinic());
     }
 
 
