@@ -1,0 +1,3 @@
+2
+abcdd abccd cccd
+aabb aabcc aaa adaa
