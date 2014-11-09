@@ -1,0 +1,33 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.math.BigInteger;
+
+
+class COINTOSS {
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\COINTOSS.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			int cases=Integer.parseInt(br.readLine());
+			
+			while(cases-- >0)
+			{
+				BigInteger n=new BigInteger(br.readLine());
+				n=n.multiply(n.add(BigInteger.ONE)).multiply(n.add(new BigInteger("2"))).divide(new BigInteger("2"));
+				System.out.println(n);
+			}
+
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+
+	}
+
+}
