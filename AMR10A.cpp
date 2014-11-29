@@ -61,23 +61,19 @@ int main()
     int i;
 
     scanf("%d %d",&n,&m);
-    //cin>>n>>m;
 
     for(i=1;i<=n;++i)
     {
         scanf("%lld %lld",x+i,y+i);
-        //cin>>x[i]>>y[i];
-        //printf("%f\t%f\n",x[i],y[i]);
 
     }
-    x[n+1]=x[0];
-    y[n+1]=y[0];
+    x[n+1]=x[1];
+    y[n+1]=y[1];
 
 
     for(i=1;i<=n;++i)
     {
         arr[i]=arr[i-1]+(x[i]*y[i+1]-x[i+1]*y[i]);
-        //cout<<arr[i]<<endl;
     }
 
     tt=abs(arr[n]);
@@ -86,12 +82,10 @@ int main()
     while(m--)
     {
         scanf("%d %d",&a,&b);
-        //cin>>a>>b;
         ans=arr[b]-arr[a];
         ans+=x[b+1]*y[a+1]-x[a+1]*y[b+1];
         ans=abs(ans);
         ans2=tt-ans;
-        //printf("A\t%f\t%f\n",ans,ans2);
         ans=min(ans,ans2);
         double ti=ans;
         printf("%.1f\n",ti/2LL);
