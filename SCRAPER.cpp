@@ -71,10 +71,14 @@ inline int readPosInt()
 
 
 #define MAXF 50000000
-int par[MAXF];
-int e,a,b,f;
+#define MAXE 105
 
-inline int findd(int x)
+int par[MAXE];
+int src,snk;
+int e,a,b,f;
+int xs[MAXE],ys[MAXE];
+
+int findd(int x)
 {
     if(par[x]!=x)
     {
@@ -84,6 +88,72 @@ inline int findd(int x)
     return par[x];
 }
 
+int gcdd2(int x,int y)
+{
+    if(y==0)
+    {
+        return x;
+    }
+
+    return gcdd2(y,x%y);
+}
+
+int gcdd(int x,int y)
+{
+    if(x<y)
+    {
+        return gcdd2(y,x);
+    }
+
+    return gcdd2(x,y);
+}
+
+bool visits(int elevv,int floorr)
+{
+    return ((floorr>=ys[elevv]) && ((floorr-ys[elevv])%xs[elevv]==0));
+}
+
+bool do_meet(int x,int y)
+{
+
+    int gg,lcmm,mx,diff,ti1,ti2,st,i;
+
+
+    gg=gcdd(xs[x],xs[y]);
+    lcmm=xs[x]*xs[y]/gg;
+    mx=max(ys[x],ys[y]);
+    diff=mx-min(ys[x],ys[y]);
+
+
+
+    if(diff%gg)
+    {
+        return 0;
+    }
+
+    if((f-mx)>=lcmm)
+    {
+        return 1;
+    }
+
+    ti1=(xs[x]>xs[y])?x:y;
+    ti2=(xs[x]>xs[y])?y:x;
+
+    st= xs[ti1]*((mx - ys[ti1] + xs[ti1] - 1)/xs[ti1]) + ys[ti1];
+    i=0;
+
+
+    while(true)
+    {
+        if (st + xs[ti1]*i >= f) return 0;
+        if (visits(ti2, st + xs[ti1]*i)) return 1;
+        ++i;
+    }
+
+
+    return 0;
+}
+
 int main()
 {
     freopen("Text/SCRAPER.txt","r",stdin);
@@ -91,46 +161,78 @@ int main()
     int cases;
     int px,py;
 
-    //scanf("%d",&cases);
-    cases=readPosInt();
+    scanf("%d",&cases);
+    //cases=readPosInt();
     int i,j;
     bool poss;
 
     while(cases--)
     {
-        //scanf("%d %d %d %d",&f,&e,&a,&b);
-        f=readPosInt();
-        e=readPosInt();
-        a=readPosInt();
-        b=readPosInt();
+        scanf("%d %d %d %d",&f,&e,&a,&b);
+        //f=readPosInt();
+        //e=readPosInt();
+        //a=readPosInt();
+        //b=readPosInt();
         poss=false;
+        src=e+1;
+        snk=e+2;
 
-        for(i=0;i<f;++i)
+        for(i=1;i<=e+2;++i)
         {
             par[i]=i;
         }
 
-        for(i=0;i<e;++i)
+        for(i=1;i<=e;++i)
         {
-            //scanf("%d %d",&x,&y);
-            x=readPosInt();
-            y=readPosInt();
+            scanf("%d %d",xs+i,ys+i);
+            //xs[i]=readPosInt();
+            //ys[i]=readPosInt();
+        }
 
-            py=findd(y);
-
-            for(j=x+y;j<f;j+=x)
+        for(i=1;i<=e;++i)
+        {
+            for(j=i+1;j<=e;++j)
             {
-                px=findd(j);
+                if(do_meet(i,j))
+                {
+                    px=findd(i);
+                    py=findd(j);
+                    par[py]=px;
+                }
+            }
+        }
+
+        for(i=1;i<=e;++i)
+        {
+            if(visits(i,a))
+            {
+                px=findd(i);
+                py=findd(e+1);
                 par[px]=py;
             }
+        }
 
-            px=findd(a);
-            py=findd(b);
-            if(px==py)
+        for(i=1;i<=e;++i)
+        {
+            if(visits(i,b))
             {
-                poss=true;
-                break;
+                px=findd(i);
+                py=findd(e+2);
+                par[px]=py;
             }
+        }
+
+        px=findd(e+1);
+        py=findd(e+2);
+
+        if(px==py)
+        {
+            poss=true;
+        }
+
+        if(a==b)
+        {
+            poss=true;
         }
 
         if(poss)

@@ -46,7 +46,23 @@ using namespace std;
 #define Vi64 vector<i64>
 #define Vu64 vector<u64>
 
+double m[4];
+bool MINF[4];
+double c[4];
+double pts[4][2];
+bool vall[4];
+bool poss=true;
+#define EPS 1e-8
 
+bool eqq(double x,double y)
+{
+    if(fabs(x-y)<=EPS)
+    {
+        return true;
+    }
+
+    return false;
+}
 
 
 
@@ -61,24 +77,137 @@ int main()
     cin>>l;
     cin>>x2>>y2;
 
-    double ti=pow(x2-x1,2)+pow(y2-y1,2);
-    l=l*l/4;
+    pts[0][0]=x1-l/2.0;
+    pts[0][1]=y1-l/2.0;
 
-    if(l<ti)
+    pts[1][0]=x1-l/2.0;
+    pts[1][1]=y1+l/2.0;
+
+    pts[2][0]=x1+l/2.0;
+    pts[2][1]=y1+l/2.0;
+
+    pts[3][0]=x1+l/2.0;
+    pts[3][1]=y1-l/2.0;
+
+    for(int i=0;i<4;++i)
     {
-        printf("NO\n");
+        vall[i]=1;
+        if(eqq(pts[(i+1)%4][1],y2))
+        {
+            MINF[i]=1;
+            c[i]=pts[i][0];
+        }
+        else
+        {
+            m[i]=-(pts[(i+1)%4][0]-x2)/(pts[(i+1)%4][1]-y2);
+            c[i]=pts[i][1]-m[i]*pts[i][0];
+        }
     }
-    else
+
+    for(int i=0;i<4;++i)
     {
-        double t1=x1+(y1-y2);
-        double t2=y1+(x2-x1);
-        printf("YES\n");
-        printf("%.1f %.1f\n",t1,t2);
+        for(int j=0;j<4;++j)
+        {
+            if(i==j || !vall[j])
+            {
+                continue;
+            }
 
+            if(MINF[i] && MINF[j])
+            {
+                if(eqq(c[i],c[j]))
+                {
+                    vall[i]=0;
+                    break;
+                }
+                else
+                {
+                    poss=false;
+                }
+            }
+            else
+            {
+                if(eqq(m[i],m[j]))
+                {
+                    if(eqq(c[i],c[j]))
+                    {
+                        vall[i]=0;
+                        break;
+                    }
+                    else
+                    {
+                        poss=false;
+                    }
+                }
+            }
+        }
     }
 
+    VD xs;
+    VD ys;
+    double tx,ty;
 
+    for(int i=0;i<4;++i)
+    {
+        //printf("%d\n",vall[i]);
+    }
+
+    if(poss)
+    {
+
+        for(int i=0;i<4;++i)
+        {
+            if(!vall[i])
+            {
+                continue;
+            }
+            for(int j=i+1;j<4;++j)
+            {
+                if(!vall[j])
+                {
+                    continue;
+                }
+
+                tx=(c[j]-c[i])/(m[i]-m[j]);
+                ty=m[i]*tx+c[i];
+                xs.PB(tx);
+                ys.PB(ty);
+                //printf("%.1f %.1f\n",tx,ty);
+            }
+        }
+
+
+        if(xs.size()==0)
+        {
+            //printf("ccccccccDD\n");
+            poss=0;
+        }
+
+        for(int i=1;i<xs.size();++i)
+        {
+            if(!eqq(xs[i],xs[i-1]) || !eqq(ys[i],ys[i-1]))
+            {
+                poss=0;
+                break;
+            }
+        }
+
+        if(!poss)
+        {
+            printf("NO\n");
+        }
+        else
+        {
+            printf("YES\n");
+            printf("%.1f %.1f\n",xs[0],ys[0]);
+        }
+
+
+
+
+    }
 
     return 0;
+
 }
 

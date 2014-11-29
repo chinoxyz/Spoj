@@ -4,9 +4,14 @@ int n;
 int ct[10];
 void solve()
 {
+    if(n==0)
+    {
+        printf("%d\n",10);
+        return;
+
+    }
     if(n<10)
     {
-        n+=10;
         printf("%d\n",n);
         return;
     }
@@ -26,15 +31,6 @@ void solve()
     else
     {
         for(int i=1;i<=9;++i)
-        {
-            if(ct[i])
-            {
-                --ct[i];
-                printf("%d",i);
-            }
-        }
-
-        for(int i=0;i<=9;++i)
         {
             while(ct[i])
             {

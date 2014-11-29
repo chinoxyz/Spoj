@@ -110,9 +110,13 @@ void solve()
             continue;
         }
 
-        flipp(i);
+        if(i>0)
+        {
+            flipp(i);
+        }
 
-        if(ct<n-1)
+
+        if(ct<(n-1))
         {
             if(arr[0]>0)
             {
@@ -121,9 +125,15 @@ void solve()
 
             flipp(n-ct-1);
         }
+        else
+        {
+            if(arr[0]<0)
+            {
+                flipp(0);
+            }
+        }
         ++ct;
     }
-
 }
 
 int main()
@@ -156,11 +166,10 @@ int main()
         }
         else
         {
-            printf("%d\n",t);
+            printf("%d ",t);
+            printf("%d\n",ans);
         }
-
     }
-
 
     return 0;
 }

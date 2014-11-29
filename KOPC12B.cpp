@@ -73,6 +73,7 @@ inline void pree()
 inline i64 poww(i64 n,i64 p)
 {
     i64 ret=1LL;
+    n=factt[n];
 
     while(p)
     {
@@ -139,3 +140,5 @@ int main()
 
     return 0;
 }
+
+
