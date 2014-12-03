@@ -130,7 +130,7 @@ void solve()
     i64 ti;
     int i;
 
-    for(curr=1;curr<(1<<m)-1;++curr)
+    for(curr=1;curr<(1<<m);++curr)
     {
         poss=true;
         ct=__builtin_popcount(curr);
@@ -201,6 +201,10 @@ int main()
         }
 
         solve();
+        if(n==1)
+        {
+            ans=0LL;
+        }
 
         if(ans<INF)
         {

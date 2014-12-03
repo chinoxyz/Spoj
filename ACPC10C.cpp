@@ -46,149 +46,79 @@ using namespace std;
 #define Vi64 vector<i64>
 #define Vu64 vector<u64>
 
-#define MAXN 32005
+#define MAXN 32008
 char arr[MAXN];
 int n;
-int pos=0;
+int visd[MAXN];
+int md;
+int vd[MAXN];
+int nodes[MAXN];
+VI child[MAXN];
+int mp;
+int depth[MAXN];
 
-PII solve()
+int solve(int l,int r,int dp)
 {
-    PII ret;
-    ++pos;
-    int val,ao;
-    if(arr[pos]=='(')
+    int cn=mp;
+    depth[cn]=dp;
+    md=max(dp,md);
+
+    if(l==r)
     {
-        PII tp1=solve();
-        ao=tp1.second^1;
-        val=tp1.first;
-
-        if(arr[pos]=='(')
+        if(arr[l]=='T')
         {
-            PII tp3=solve();
-
-            if(tp3.first)
-            {
-                if(ao)
-                {
-                    val|=1;
-                }
-                else
-                {
-                    val&=1;
-                }
-            }
-            else
-            {
-                if(ao)
-                {
-                    val|=0;
-                }
-                else
-                {
-                    val&=0;
-                }
-            }
-            ++pos;
-            ret.first=val;
-            ret.second=ao;
+            nodes[mp]=1;
         }
         else
         {
-            if(arr[pos]=='T')
-            {
-                if(ao)
-                {
-                    val|=1;
-                }
-                else
-                {
-                    val&=1;
-                }
-            }
-            else
-            {
-                if(ao)
-                {
-                    val|=0;
-                }
-                else
-                {
-                    val&=0;
-                }
-            }
-            ++pos;
-
-            ret.first=val;
-            ret.second=ao;
+            nodes[mp]=0;
         }
+
+        ++mp;
+        return (mp-1);
     }
-    else
+
+    int ll=l+1;
+    int ct=0;
+    ++mp;
+    int ti;
+    int ti2;
+
+    while(ll<=r)
     {
-        if(arr[pos]=='T')
+        if(arr[ll]=='(')
         {
-            val=1;
-        }
-        else
-        {
-            val=0;
-        }
-        ++pos;
-        if(arr[pos]=='(')
-        {
-            PII tp2=solve();
-            ao=tp2.second^1;
+            ti=ll;
+            ++ll;
+            ct=1;
 
-            if(tp2.first)
+            while(ct && ll<=r)
             {
-                if(ao)
+                if(arr[ll]=='(')
                 {
-                    val|=1;
+                    ++ct;
                 }
-                else
+                else if(arr[ll]==')')
                 {
-                    val&=1;
+                    --ct;
                 }
+                ++ll;
             }
-            else
-            {
-                if(ao)
-                {
-                    val|=0;
-                }
-                else
-                {
-                    val&=0;
-                }
-            }
-            ++pos;
-            ret.first=val;
-            ret.second=ao;
 
+            --ll;
+            ti2=solve(ti,ll,dp+1);
+            child[cn].PB(ti2);
 
         }
-        else
+        else if(arr[ll]!=')')
         {
-            if(arr[pos]=='T')
-            {
-                val&=1;
-            }
-            else
-            {
-                val=0;
-            }
-            ++pos;
-            ao=0;
-            ret.first=val;
-            ret.second=ao;
+            ti2=solve(ll,ll,dp+1);
+            child[cn].PB(ti2);
         }
+        ++ll;
     }
 
-    if(pos<n && arr[pos]==')')
-    {
-        ++pos;
-    }
-
-    return ret;
+    return cn;
 }
 
 
@@ -197,23 +127,78 @@ int main()
     freopen("Text/ACPC10C.txt","r",stdin);
 
     int cases=0;
+    int i;
+    int j,ti,v;
 
     while(true)
     {
-        pos=0;
+        //MSET(visd,0);
+        //MSET(vd,0);
+        md=0;
+        //MSET(nodes,0);
+        //MSET(depth,0);
+
+
+
+
+        mp=0;
         ++cases;
-        scanf("%s",arr);
-        if(strcmp(arr,"()")==0)
+        scanf("%s",arr+1);
+        if(strcmp(arr+1,"()\0")==0)
         {
             break;
         }
-        n=strlen(arr);
+        n=strlen(arr+1);
+        arr[0]='(';
+        arr[n+1]=')';
+        arr[n+2]='\0';
+        n+=2;
+        //printf("%s\n",arr);
 
-        PII ans=solve();
+        for(i=0;i<n;++i)
+        {
+            child[i].clear();
+        }
+
+        solve(0,n-1,0);
+
+        ti=0;
+        for(i=md-1;i>=0;--i)
+        {
+            vd[i]=ti;
+            ti^=1;
+        }
+
+        for(i=mp-1;i>=0;--i)
+        {
+            if(child[i].size())
+            {
+                v=nodes[child[i][0]];
+
+                if(vd[depth[i]])
+                {
+                    for(j=1;j<child[i].size();++j)
+                    {
+                        v|=nodes[child[i][j]];
+                    }
+                }
+                else
+                {
+                    for(j=1;j<child[i].size();++j)
+                    {
+                        v&=nodes[child[i][j]];
+                    }
+                }
+
+                nodes[i]=v;
+            }
+
+
+        }
 
         printf("%d. ",cases);
 
-        if(ans.first)
+        if(nodes[0])
         {
             printf("true\n");
         }
