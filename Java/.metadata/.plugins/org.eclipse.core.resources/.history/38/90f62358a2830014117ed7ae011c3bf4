@@ -1,0 +1,153 @@
+import java.io.*;
+import java.math.BigInteger;
+
+
+class TREE {
+	
+	static int MAXN=33;
+	static int MAXD=17;
+	
+	static BigInteger dp[][]=new BigInteger[MAXN][MAXD];
+	static BigInteger summ[][]=new BigInteger[MAXN][MAXD];
+	static BigInteger TWO=new BigInteger("2");
+	static int tcc=0;
+	static BigInteger factt[][]=new BigInteger[MAXN][MAXN];
+	
+	
+	static int bcountt(int numm)
+	{
+		int ret=0;
+		
+		for(int i=0;i<31;++i)
+		{
+			if((numm&(1<<i))>0)
+			{
+				++ret;
+			}
+		}
+		
+		return ret;
+	}
+	
+	static BigInteger bPoww(BigInteger numm,int p)
+	{
+		BigInteger ret=BigInteger.ONE;
+		
+		while(p>0)
+		{
+			
+			if((p&1)>0)
+			{
+				ret=ret.multiply(numm);
+			}
+			p>>=1;
+			
+			numm=numm.multiply(numm);
+		}
+		
+		
+		
+		return ret;
+	}
+	
+	static void prefacc()
+	{
+		
+		factt[0][0]=BigInteger.ONE;
+		
+		int i,j;
+		for(i=1;i<MAXN;++i)
+		{
+			factt[i][0]=BigInteger.ONE;
+			factt[i][i]=BigInteger.ONE;
+			for(j=1;j<i;++j)
+			{
+				//System.out.println(i+"\t"+j+"\tFCATTTTTT");
+				factt[i][j]=factt[i-1][j-1].add(factt[i-1][j]);
+			}
+		}
+		
+		
+	}
+	
+	static void pree()
+	{
+		prefacc();
+		int i,j;
+		int k;
+		int ct;
+		for(i=0;i<MAXD;++i)
+		{
+			dp[1][i]=BigInteger.ONE;
+		}
+		
+		for(i=2;i<MAXN;++i)
+		{
+			dp[i][0]=dp[i][1]=summ[i][0]=BigInteger.ONE;
+			summ[i][1]=TWO;
+			BigInteger I=new BigInteger(i+"");
+			for(j=2;j<MAXD;++j)
+			{
+				dp[i][j]=BigInteger.ZERO;
+				
+				BigInteger p1=BigInteger.ONE;
+				BigInteger p2=bPoww(summ[i][j-1],i);
+				
+				for(k=1;k<=i;++k)
+				{
+					++tcc;
+					System.out.println(tcc+"\tDD");
+					p1=p1.multiply(dp[i][j-1]);
+					p2=p2.divide(summ[i][j-1]);
+					
+					if((k&1)>0)
+					{
+						dp[i][j]=dp[i][j].add(factt[i][k].multiply(p1).multiply(p2));
+					}
+					else
+					{
+						dp[i][j]=dp[i][j].subtract(factt[i][k].multiply(p1).multiply(p2));
+					}
+				}
+				
+				summ[i][j]=summ[i][j-1].add(dp[i][j]);
+			}
+		}
+		
+		
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\TREE.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			pree();
+			int n,d;
+			
+			while(true)
+			{
+				
+				String a[]=br.readLine().split(" ");
+				n=Integer.parseInt(a[0]);
+				d=Integer.parseInt(a[1]);
+				if(n+d==0)
+				{
+					break;
+				}
+				
+				System.out.println(n+" "+d+" "+dp[n][d]);
+			}			
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
+	}
+
+}

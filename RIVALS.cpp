@@ -48,27 +48,58 @@ using namespace std;
 
 
 #define MODD 1000000007LL
+#define MAXN 2000007
 
-i64 fact(int x,int y)
+i64 fact[MAXN];
+
+void pree()
 {
-    i64 ret=1LL;
+    fact[0]=fact[1]=1;
 
-    while(x>y)
+    for(i64 i=2;i<MAXN;++i)
     {
-        ret*=x;
-        ret%=MODD;
-        --x;
+        fact[i]=(i*fact[i-1])%MODD;
+    }
+}
+
+
+i64 poww(i64 x,i64 p)
+{
+    i64 ret=1;
+
+    while(p)
+    {
+        if(p&1LL)
+        {
+            ret*=x;
+            ret%=MODD;
+        }
+        p>>=1;
+        x*=x;
+        x%=MODD;
     }
 
     return ret;
 }
 
+i64 invv(i64 x)
+{
+    return poww(x,MODD-2LL);
+}
 
 int solve(int x,int y)
 {
-    i64 ti=max(x,y);
-    i64 ti2=min(x,y);
-    i64 ret=fact(x+y,ti)/fact(ti2,1);
+    i64 ret=1;
+
+    ret*=fact[x+y];
+    ret%=MODD;
+
+    ret*=invv(fact[x]);
+    ret%=MODD;
+
+    ret*=invv(fact[y]);
+    ret%=MODD;
+
 
     return ret;
 }
@@ -76,6 +107,7 @@ int solve(int x,int y)
 int main()
 {
     freopen("Text/RIVALS.txt","r",stdin);
+    pree();
     int cases;
     int x,y;
 
@@ -89,3 +121,4 @@ int main()
 
     return 0;
 }
+

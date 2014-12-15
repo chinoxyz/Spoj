@@ -1,0 +1,20 @@
+#include <cstdio>
+#include <algorithm>
+#include <iostream>
+#include<sstream>
+#include<cstring>
+
+
+using namespace std;
+#define i64 long long
+
+
+
+int main()
+{
+    freopen("Text/PRUBALL.txt","r",stdin);
+
+
+
+    return 0;
+}

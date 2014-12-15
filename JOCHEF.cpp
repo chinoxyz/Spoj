@@ -48,52 +48,75 @@ using namespace std;
 
 #define MAXN 4006
 
-i64 n,m,f;
+i64 f;
+int n,m;
 char arr[MAXN][MAXN];
 int summ[MAXN][MAXN];
 
 
-int solve()
+inline int calc(int roww)
 {
-    MSET(summ,0);
     int ret=0;
-    int ct=0;
+
+    stack<int> st;
+    st.push(0);
     int ti;
-    int i,l,j,r;
+    int ti2;
+
+    for(int i=1;i<=n+1;++i)
+    {
+        while(st.size() && summ[roww][st.top()]>=summ[roww][i])
+        {
+            ti2=st.top();
+            st.pop();
+            if(!st.empty())
+            {
+                ti=summ[roww][ti2]*(i-st.top()-1);
+            }
+            else
+            {
+                ti=summ[roww][ti2]*(i-1);
+            }
+
+            ret=max(ret,ti);
+        }
+        st.push(i);
+    }
+
+    return ret;
+}
+
+inline int solve()
+{
+    //MSET(summ,0);
+    int ret=0;
+    int i,j;
+
+    for(i=0;i<=n+1;++i)
+    {
+        summ[0][i]=0;
+    }
 
     for(i=1;i<=m;++i)
     {
+        summ[i][0]=0;
+        summ[i][n+1]=0;
         for(j=1;j<=n;++j)
         {
-            summ[i][j]+=summ[i][j-1];
+
             if(arr[i][j]=='H')
             {
+                summ[i][j]=summ[i-1][j];
                 ++summ[i][j];
             }
-        }
-    }
-
-    for(l=1;l<=n;++l)
-    {
-        for(r=l;r<=n;++r)
-        {
-            ti=r-l+1;
-            for(i=1;i<=m;++i)
+            else
             {
-                if((summ[i][r]-summ[i][l-1])==ti)
-                {
-                    ++ct;
-                    ret=max(ret,ct*ti);
-                }
-                else
-                {
-                    ct=0;
-                }
+                summ[i][j]=0;
             }
         }
+
+        ret=max(ret,calc(i));
     }
-
-
 
     return ret;
 }
@@ -105,8 +128,8 @@ int main()
 
     while(true)
     {
-        scanf("%lld %lld",&m,&n);
-        if(m+n==0LL)
+        scanf("%d %d",&m,&n);
+        if(m+n==0)
         {
             break;
         }
@@ -115,7 +138,6 @@ int main()
         for(int i=1;i<=m;++i)
         {
             scanf("%s",&arr[i][1]);
-            //printf("%s\n",&arr[i][1]);
         }
         printf("%lld\n",f*(i64)solve());
     }

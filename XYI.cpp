@@ -47,6 +47,9 @@ using namespace std;
 #define Vu64 vector<u64>
 
 #define MAXN 505
+PII deg[MAXN];
+int ct[MAXN];
+int gr[MAXN][MAXN];
 
 
 
@@ -54,23 +57,149 @@ int main()
 {
     freopen("Text/XYI.txt","r",stdin);
 
-    while(true)
+    int cases;
+    scanf("%d",&cases);
+    int ans=1;
+    int x,y;
+    int n,m;
+    int ti;
+
+    for(int t=1;t<=cases;++t)
     {
-        scanf("%lld %lld",&m,&n);
-        if(m+n==0LL)
-        {
-            break;
-        }
-        scanf("%lld",&f);
+        ans=1;
+        scanf("%d %d",&n,&m);
 
-        for(int i=1;i<=m;++i)
+        MSET(deg,0);
+        MSET(ct,0);
+        MSET(gr,0);
+
+        for(int i=1;i<=n;++i)
         {
-            scanf("%s",&arr[i][1]);
-            //printf("%s\n",&arr[i][1]);
+            deg[i].second=i;
         }
-        printf("%lld\n",f*(i64)solve());
+
+        for(int i=0;i<m;++i)
+        {
+            scanf("%d %d",&x,&y);
+            --deg[x].first;
+            --deg[y].first;
+            --ct[x];
+            --ct[y];
+            gr[x][y]=1;
+            gr[y][x]=1;
+        }
+
+        sort(deg+1,deg+n+1);
+
+        if(deg[1].first==-4)
+        {
+            if(deg[2].first<-2)
+            {
+                ans=1;
+            }
+            else
+            {
+                ti=deg[1].second;
+                for(int i=1;i<=n;++i)
+                {
+                    if(!gr[ti][i])
+                    {
+                        continue;
+                    }
+                    for(int j=i+1;j<=n;++j)
+                    {
+                        if(gr[ti][j] && gr[i][j])
+                        {
+                            ans=0;
+                            break;
+                        }
+                    }
+                    if(!ans)
+                    {
+                        break;
+                    }
+                }
+
+                if(!ans)
+                {
+                    ans=1;
+                }
+                else
+                {
+                    ans=4;
+                }
+            }
+        }
+        else if(deg[1].first==-3)
+        {
+            if(deg[2].first<-2)
+            {
+                ans=1;
+            }
+            else
+            {
+                ti=deg[1].second;
+                for(int i=1;i<=n;++i)
+                {
+                    if(!gr[ti][i])
+                    {
+                        continue;
+                    }
+                    for(int j=i+1;j<=n;++j)
+                    {
+                        if(gr[ti][j] && gr[i][j])
+                        {
+                            ans=0;
+                            break;
+                        }
+                    }
+                    if(!ans)
+                    {
+                        break;
+                    }
+                }
+
+                if(!ans)
+                {
+                    ans=1;
+                }
+                else
+                {
+                    ans=3;
+                }
+            }
+        }
+        else if(deg[1].first==-2)
+        {
+            if(deg[n].first==-1 && deg[n-1].first==-1)
+            {
+                ans=2;
+            }
+        }
+        else
+        {
+            ans=1;
+        }
+
+        printf("Case %d: ",t);
+
+        if(ans==1)
+        {
+            printf("NotValid\n");
+        }
+        else if(ans==2)
+        {
+            printf("I\n");
+        }
+        else if(ans==3)
+        {
+            printf("Y\n");
+        }
+        else
+        {
+            printf("X\n");
+        }
     }
-
 
 
     return 0;

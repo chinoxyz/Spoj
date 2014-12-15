@@ -1,0 +1,33 @@
+import java.io.*;
+import java.math.BigInteger;
+
+
+class MINNUM {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\MINNUM.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			
+			while(1)
+			{
+				
+				
+			}
+			
+
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+
+	}
+
+}
