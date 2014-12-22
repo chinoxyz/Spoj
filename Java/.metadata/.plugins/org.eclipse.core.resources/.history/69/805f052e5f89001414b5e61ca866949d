@@ -1,0 +1,77 @@
+import java.io.*;
+import java.math.*;
+import java.util.Arrays;
+
+
+class MUL2COM {
+	
+	static BigInteger TWO=new BigInteger("2");
+	static BigInteger N1=new BigInteger("-1");
+	static BigInteger ONE=new BigInteger("1");
+	static BigInteger ZERO=new BigInteger("0");
+
+	public static void main(String[] args) {
+		
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\MUL2COM.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+					
+			BigInteger a,b,ans;
+			BigInteger tn1;
+			BigInteger tn;
+			int n;
+			String s;
+			
+			while(true)
+			{
+				n=Integer.parseInt(br.readLine());
+				if(n==0)
+				{
+					break;
+				}
+				tn=TWO.pow(n);
+				tn1=TWO.pow(n-1);
+				
+				a=new BigInteger(br.readLine(),2);
+				b=new BigInteger(br.readLine(),2);
+				if(a.compareTo(tn1)>=0)
+				{
+					a=a.subtract(tn);
+				}
+				if(b.compareTo(tn1)>=0)
+				{
+					b=b.subtract(tn);
+				}
+				
+				ans=a.multiply(b);
+				
+				if(ans.compareTo(tn1)>=0 || ans.compareTo(tn1.multiply(N1))<0)
+				{
+					System.out.println("overflow");
+				}
+				else
+				{
+					if(ans.compareTo(ZERO)<0)
+					{
+						System.out.println(ans.abs().xor(tn.subtract(ONE)).add(ONE).toString(2));
+					}
+					else
+					{
+						s=ans.toString(2)
+						System.out.println();
+					}
+					
+				}
+				
+			}
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+
+}

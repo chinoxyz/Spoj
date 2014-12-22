@@ -1,0 +1,46 @@
+import java.io.*;
+import java.math.*;
+import java.util.*;
+
+
+class ATMS {
+	
+	public static BigInteger ONE=BigInteger.ONE;
+	public static BigInteger N1=new BigInteger("-1");
+	public static BigInteger N2=new BigInteger("-2");
+	public static BigInteger TWO=new BigInteger("2");
+	ArrayList<Integer> ans=new ArrayList<Integer>();
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\ATMS.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			int cases;
+			cases=Integer.parseInt(br.readLine());
+			
+			BigInteger n;
+			while(cases-- >0)
+			{
+				n=new BigInteger(br.readLine());
+				if(solve(n))
+				{
+					
+				}
+				
+				if(solve(n.multiply(N1)))
+				{
+					
+				}
+				
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

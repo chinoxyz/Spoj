@@ -1,0 +1,104 @@
+import java.io.*;
+import java.math.*;
+import java.security.SecureRandom;
+import java.util.*;
+
+
+class FACT1 {
+	
+	final static int MAXN=111;	
+	final static BigInteger ZERO = new BigInteger("0");
+	final static BigInteger ONE  = new BigInteger("1");
+	final static BigInteger TWO  = new BigInteger("2");
+	final static SecureRandom random = new SecureRandom();
+	static BigInteger[] factors = new BigInteger[MAXN];
+	static int lenn = 0;
+	
+	
+	public static BigInteger rho(BigInteger N) 
+	{
+		BigInteger divisor;
+		BigInteger c  = new BigInteger(N.bitLength(), random);
+		BigInteger x  = new BigInteger(N.bitLength(), random);
+		BigInteger xx = x;
+
+		if (N.mod(TWO).compareTo(ZERO) == 0) return TWO;
+		
+		do 
+		{
+			x  =  x.multiply(x).mod(N).add(c).mod(N);
+			xx = xx.multiply(xx).mod(N).add(c).mod(N);
+			xx = xx.multiply(xx).mod(N).add(c).mod(N);
+			divisor = x.subtract(xx).gcd(N);
+		} while((divisor.compareTo(ONE)) == 0);
+		
+		return divisor;
+	}
+	
+	public static void factorize(BigInteger N) 
+	{
+		if (N.compareTo(ONE) == 0) return;
+		if (N.isProbablePrime(20)) {
+			factors[lenn++] = N;
+			return;
+		}
+		BigInteger divisor = rho(N);
+		factorize(divisor);
+		factorize(N.divide(divisor));
+	}
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\FACT1.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			String s;
+			BigInteger tb;
+			int i,j;
+			boolean fl;
+			
+			
+			while(true)
+			{		
+				s=br.readLine();
+				if(s.equals("0"))
+				{
+					break;
+				}
+				lenn=0;
+				factorize(new BigInteger(s));
+				Arrays.sort(factors,0,lenn);
+				
+				for(i=0,fl=true;i<lenn;++i)
+				{
+					tb=factors[i];
+					j=i;
+					while(j<lenn && factors[j].equals(tb))
+					{
+						++j;
+					}
+					if(fl)
+					{
+						fl=false;
+					}
+					else
+					{
+						System.out.print(" ");
+					}
+					
+					System.out.print(tb+"^"+(j-i));
+					i=j-1;
+				}
+				
+				System.out.println();
+			}			
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

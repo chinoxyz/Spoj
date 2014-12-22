@@ -1,0 +1,35 @@
+import java.io.*;
+import java.math.*;
+import java.security.SecureRandom;
+import java.util.*;
+
+
+class FACT1 {
+	
+	final static BigInteger ZERO = new BigInteger("0");
+	final static BigInteger ONE  = new BigInteger("1");
+	final static BigInteger TWO  = new BigInteger("2");
+	final static SecureRandom random = new SecureRandom();
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\FACT1.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			pree();
+			int n,d;
+			
+			while(true)
+			{		
+				
+			}			
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

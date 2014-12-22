@@ -1,0 +1,119 @@
+import java.io.*;
+import java.math.*;
+import java.util.*;
+
+
+class ATMS {
+	
+	public static BigInteger ONE=BigInteger.ONE;
+	public static BigInteger ZERO=BigInteger.ZERO;
+	public static BigInteger N1=new BigInteger("-1");
+	public static BigInteger N2=new BigInteger("-2");
+	public static BigInteger TWO=new BigInteger("2");
+	static ArrayList<Integer> ans=new ArrayList<Integer>();
+	
+	static boolean solve(BigInteger n)
+	{
+		
+		BigInteger rem=ZERO;
+		
+		for(int i=0;i<100;++i)
+		{
+			System.out.println(n);
+			if(n.compareTo(ZERO)>=0)
+			{
+				rem=n.mod(TWO);
+				n=n.divide(TWO);
+				n=n.multiply(N1);
+			}
+			else
+			{
+				if(n.mod(TWO).compareTo(ZERO)!=0)
+				{
+					rem=ZERO;
+					n=n.divide(TWO);
+				}
+				else
+				{
+					rem=TWO.subtract(n.mod(TWO));
+					n=n.divide(TWO);
+					n=n.add(ONE);
+					
+				}
+			}
+			
+			
+			if(rem.compareTo(ZERO)<0)
+			{
+				n=n.add(ONE);
+				rem=rem.add(TWO);
+			}
+			ans.add(rem.intValue());
+		}
+		
+		if(n.compareTo(ZERO)!=0)
+		{
+			return  false;
+		}
+		return true;
+	}
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\ATMS.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			int cases;
+			cases=Integer.parseInt(br.readLine());
+			
+			BigInteger n;
+			int i;
+			while(cases-- >0)
+			{
+				n=new BigInteger(br.readLine());
+				ans.clear();
+				if(solve(n))
+				{
+					for(i=ans.size()-1;i>=0;--i)
+					{
+						if(ans.get(i)!=0)
+						{
+							System.out.print(ans.get(i)+" ");
+						}
+					}
+					
+					System.out.println();
+				}
+				else
+				{
+					System.out.println("No\n");
+				}
+				
+				ans.clear();
+				if(solve(n.multiply(N1)))
+				{
+					for(i=ans.size()-1;i>=0;--i)
+					{
+						if(ans.get(i)!=0)
+						{
+							System.out.print(ans.get(i)+" ");
+						}
+					}
+					System.out.println();
+				}
+				else
+				{
+					System.out.println("No\n");
+				}
+				
+			}
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

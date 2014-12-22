@@ -46,58 +46,80 @@ using namespace std;
 #define Vi64 vector<i64>
 #define Vu64 vector<u64>
 
-#define MAXK 1005
+#define MODD 1000000007LL
 
-int n, k;
-int arr[MAXK];
-int row_src[MAXK], row_destt[MAXK];
-int col_src[MAXK], col_destt[MAXK];
-
-void row_rotate( int r, int diff ,int pos)
+struct Matrix
 {
-	for( int i = pos; i < k; ++i )
-	{
-		if( row_src[i] == r )
-		{
-			col_src[i] = (col_src[i] + diff) % n;
-		}
-	}
+    i64 arr[2][2];
+};
+
+Matrix basee,unitt;
+
+
+inline void multt(Matrix &a,Matrix b)
+{
+    Matrix t;
+    int i,j,k;
+
+    for(i=0;i<2;++i)
+    {
+        for(j=0;j<2;++j)
+        {
+            t.arr[i][j]=0;
+            for(k=0;k<2;++k)
+            {
+                t.arr[i][j]+=(a.arr[i][k]*b.arr[k][j]);
+                t.arr[i][j]%=MODD;
+            }
+        }
+    }
+
+    a=t;
 }
-void col_rotate( int c, int diff,int pos )
+
+
+inline void poww(Matrix &m,i64 p)
 {
-	for( int i = pos; i < k; ++i )
-	{
-		if( col_src[i] == c )
-		{
-			row_src[i] = (row_src[i] + diff) % n;
-		}
-	}
+    Matrix ret=unitt;
+
+    while(p)
+    {
+        if(p&1)
+        {
+            multt(ret,m);
+        }
+        p>>=1;
+        multt(m,m);
+    }
+
+    m=ret;
 }
 
 int main( void )
 {
-   freopen("Text/TABLIC.txt","r",stdin);
+   freopen("Text/BUZZOFF.txt","r",stdin);
 
-   scanf( "%d%d", &n, &k );
-   for( int i = 0; i < k; ++i )
+    basee.arr[0][0]=basee.arr[0][1]=basee.arr[1][0]=1;
+    basee.arr[1][1]=0;
+
+    unitt.arr[0][0]=unitt.arr[1][1]=1;
+    unitt.arr[0][1]=unitt.arr[1][0]=0;
+
+   int cases;
+   i64 n;
+
+   scanf("%d",&cases);
+   Matrix leftt;
+
+   while(cases--)
    {
-      scanf( "%d%d%d",arr+i,row_destt+i,col_destt+i);
-      --arr[i];
-      --row_destt[i];
-      --col_destt[i];
-      row_src[i] = arr[i] / n;
-      col_src[i] = arr[i] % n;
-   }
+       leftt=basee;
 
-   for( int i = 0; i < k; ++i )
-   {
-      int col_diff = (col_destt[i] - col_src[i]+n)%n;
-      int row_diff = (row_destt[i] - row_src[i]+n)%n;
+       scanf("%lld",&n);
+       poww(leftt,n+2);
 
-      row_rotate( row_src[i], col_diff ,i);
-      col_rotate( col_src[i], row_diff ,i);
-
-      printf( "%d\n", col_diff + row_diff );
+       leftt.arr[0][0]=(leftt.arr[0][0]+MODD-2)%MODD;
+       printf("%lld\n",leftt.arr[0][0]);
    }
 
    return 0;

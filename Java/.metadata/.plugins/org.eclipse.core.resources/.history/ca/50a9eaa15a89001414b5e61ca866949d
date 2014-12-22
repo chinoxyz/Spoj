@@ -1,0 +1,69 @@
+import java.io.*;
+import java.math.*;
+
+
+class MUL2COM {
+	
+	static BigInteger TWO=new BigInteger("2");
+	static BigInteger N1=new BigInteger("-1");
+
+	public static void main(String[] args) {
+		
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\MUL2COM.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+					
+			BigInteger a,b,ans;
+			BigInteger tn1;
+			BigInteger tn;
+			int n;
+			
+			while(true)
+			{
+				n=Integer.parseInt(br.readLine());
+				if(n==0)
+				{
+					break;
+				}
+				tn=TWO.pow(n);
+				tn1=TWO.pow(n-1);
+				
+				a=new BigInteger(br.readLine(),2);
+				b=new BigInteger(br.readLine(),2);
+				if(a.compareTo(tn1)>=0)
+				{
+					a=a.subtract(tn);
+				}
+				if(b.compareTo(tn1)>=0)
+				{
+					b=b.subtract(tn);
+				}
+				
+				ans=a.multiply(b);
+				
+				if(ans.compareTo(tn1)>=0 || ans.compareTo(tn1.multiply(N1))<0)
+				{
+					System.out.println("overflow");
+				}
+				else
+				{
+					//System.out.println(ans.toString(2));
+					byte[] bs = ans.toByteArray();
+					for (byte bb: bs) {
+					     System.out.print(String.format("%02", 0xff & bb));
+					}
+					System.out.println();
+				}
+				
+			}
+			
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+
+}
