@@ -1,0 +1,33 @@
+import java.io.*;
+import java.math.*;
+import java.util.*;
+
+
+class BIGSEQ {
+	
+	static int MAXK=101;
+	static int k,m;
+	static BigInteger ONE=BigInteger.ONE;
+	static BigInteger ZERO=BigInteger.ZERO;
+	static BigInteger TWO=new BigInteger("2");
+	static BigInteger poww[]=new BigInteger[MAXK];
+	static BigInteger summ[]=new BigInteger[MAXK];
+	
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\BIGSEQ.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			pree();
+					
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

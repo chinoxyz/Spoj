@@ -1,0 +1,23 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+
+class BIGSEQ {
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\BIGSEQ.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			pree();
+					
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}

@@ -1,0 +1,36 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+
+class BIGSEQ {
+
+	public static void main(String[] args) {
+		try
+		{
+			BufferedReader br = null;
+			br = new BufferedReader(new FileReader(".\\Text\\BIGSEQ.txt"));
+			//br = new BufferedReader(new InputStreamReader(System.in));
+			
+			pree();
+			int n,d;
+			
+			while(true)
+			{		
+				String a[]=br.readLine().split(" ");
+				n=Integer.parseInt(a[0]);
+				d=Integer.parseInt(a[1]);
+				if(n+d==0)
+				{
+					break;
+				}
+				
+				System.out.println(n+" "+d+" "+dp[n][d]);
+			}			
+		}
+		catch(Exception e)
+		{
+			
+		}	
+	}
+
+}
